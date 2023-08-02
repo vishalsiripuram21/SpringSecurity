@@ -24,7 +24,7 @@ public class Hello {
 
   @GetMapping("/hello")
   public ResponseEntity<Customer> hello(){
-    Customer cust = repo.findByEmail("vishalsiripuram@gmail.com").orElseThrow();
+    Customer cust = repo.findByEmail("sandy@gmail.com").orElseThrow();
     return ResponseEntity.ok().cacheControl(CacheControl.maxAge(5,TimeUnit.SECONDS)).body(cust);
   }
   

@@ -43,7 +43,7 @@ public class SecurityConfig {
 
       }));
 
-      http.csrf(csrf -> csrf.ignoringRequestMatchers("*"))
+      http.csrf(csrf -> csrf.ignoringRequestMatchers("/create","/hello"))
       .authorizeHttpRequests((requests) ->
                       requests.requestMatchers("/phello", "/name").authenticated()
                               .requestMatchers("/welcome", "/hello").permitAll()
