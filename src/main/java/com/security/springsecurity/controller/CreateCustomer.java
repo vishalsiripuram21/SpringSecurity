@@ -25,16 +25,16 @@ public class CreateCustomer {
   private PasswordEncoder passwordEncoder;
 
   @PostMapping("/create")
-  public ResponseEntity<String> createUser(@RequestBody Customer customer) throws Exception{
+  public ResponseEntity<Customer> createUser(@RequestBody Customer customer) throws Exception{
     Optional<Customer> existcustomer = customerRepo.findByEmail(customer.getEmail());
     if(existcustomer.isPresent()){
-      return new ResponseEntity<>("User name already exists",HttpStatus.FOUND);
+      return new ResponseEntity<Customer>(existcustomer.get(),HttpStatus.ALREADY_REPORTED);
     }
     String hashPassword = passwordEncoder.encode(customer.getPwd());
     // System.out.println(customer.getPassword()+" "+hashPassword);
     customer.setPassword(hashPassword);
     Customer savedCustomer =  customerRepo.save(customer);
-    return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
+    return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
 
   }
 

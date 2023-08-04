@@ -1,14 +1,23 @@
 package com.security.springsecurity.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.security.springsecurity.Entity.Customer;
+import com.security.springsecurity.Repository.CustomerRepo;
+
 @RestController
 public class Privatehello {
   
+  @Autowired
+  private CustomerRepo repo;
+
   @GetMapping("/phello")
-  public String hello(){
-    return "hey private hello";
+  public ResponseEntity<Customer> hello(){
+    Customer cust = repo.findByEmail("sandy@gmail.com").orElseThrow();
+    return ResponseEntity.ok().body(cust);
   }
 }

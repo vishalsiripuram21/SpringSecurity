@@ -17,6 +17,7 @@ import com.security.springsecurity.Entity.Customer;
 import com.security.springsecurity.Repository.CustomerRepo;
 
 @RestController
+
 public class Hello {
 
   @Autowired
@@ -25,7 +26,7 @@ public class Hello {
   @GetMapping("/hello")
   public ResponseEntity<Customer> hello(){
     Customer cust = repo.findByEmail("sandy@gmail.com").orElseThrow();
-    return ResponseEntity.ok().cacheControl(CacheControl.maxAge(5,TimeUnit.SECONDS)).body(cust);
+    return ResponseEntity.ok().cacheControl(CacheControl.maxAge(3600,TimeUnit.SECONDS)).body(cust);
   }
   
 }
