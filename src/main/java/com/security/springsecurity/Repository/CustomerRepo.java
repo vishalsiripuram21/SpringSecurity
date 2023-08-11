@@ -12,4 +12,5 @@ import com.security.springsecurity.Entity.Customer;
 public interface CustomerRepo extends JpaRepository<Customer,Integer> {
  
   Optional<Customer> findByEmail(String email);
+
 }

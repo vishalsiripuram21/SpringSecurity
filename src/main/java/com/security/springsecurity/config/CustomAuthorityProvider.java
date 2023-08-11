@@ -2,6 +2,7 @@ package com.security.springsecurity.config;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.security.springsecurity.Entity.Customer;
+import com.security.springsecurity.Entity.Roles;
 import com.security.springsecurity.Repository.CustomerRepo;
 
 @Component
@@ -34,7 +36,11 @@ public class CustomAuthorityProvider implements AuthenticationProvider{
     Customer customer = customerRepo.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("user not found"));
     if(passwordEncoder.matches( authentication.getCredentials().toString(), customer.getPwd())){
       List<GrantedAuthority> authorities = new ArrayList<>();
-      authorities.add(new SimpleGrantedAuthority(customer.getRole()));
+      Set<Roles> roles = customer.getCustomer();
+      for (Roles roles2 : roles) {
+        authorities.add(new SimpleGrantedAuthority(roles2.getRole()));
+      }
+      // authorities.add(new SimpleGrantedAuthority(customer.getRole().get(0)));
       return new UsernamePasswordAuthenticationToken(customer, authentication.getCredentials().toString(),authorities);
     }
     else{

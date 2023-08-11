@@ -17,7 +17,7 @@ public class Privatehello {
 
   @GetMapping("/phello")
   public ResponseEntity<Customer> hello(){
-    Customer cust = repo.findByEmail("sandy@gmail.com").orElseThrow();
+    Customer cust = repo.findByEmail("rak").orElseThrow();
     return ResponseEntity.ok().body(cust);
   }
 }

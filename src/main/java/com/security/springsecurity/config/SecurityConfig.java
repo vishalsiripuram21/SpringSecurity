@@ -55,8 +55,11 @@ public class SecurityConfig {
     })
         .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
         .authorizeHttpRequests(
-            (requests) -> requests.requestMatchers("/phello", "/hello", "/name", "/create").authenticated()
-                .requestMatchers("/welcome").permitAll()
+            (requests) -> requests.requestMatchers("/phello").hasAuthority("user")
+            .requestMatchers( "/hello").hasAuthority("admin")
+            .requestMatchers( "/name").hasAnyAuthority("admin","user")
+            .requestMatchers("/create").authenticated() 
+                .requestMatchers("/welcome","/vishal").permitAll()
 
         // .requestMatchers(HttpMethod.POST, "/create").permitAll()
         )
