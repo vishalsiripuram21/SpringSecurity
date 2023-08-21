@@ -39,6 +39,7 @@ public class CreateCustomer {
     }
     String hashPassword = passwordEncoder.encode(customer.getPwd());
     // System.out.println(customer.getPassword()+" "+hashPassword);
+    
     Set<Roles> rolesSet = new HashSet<>();
     for (String role : customer.getRole()) {
      Roles custRole = roleRepo.findByRole(role).orElseThrow();
@@ -52,13 +53,13 @@ public class CreateCustomer {
   }
 
   @GetMapping("/vishal")
-  public String vish(){
+  public Customer vish(){
    Customer cus = customerRepo.findByEmail("rak").orElseThrow();
    Set<Roles> roles = cus.getCustomer();
    for (Roles roles2 : roles) {
     System.err.println(roles2.getRole());
    }
-   return "vishal";
+   return cus;
   }
 
 

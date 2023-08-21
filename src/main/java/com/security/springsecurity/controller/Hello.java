@@ -26,7 +26,8 @@ public class Hello {
   @GetMapping("/hello")
   public ResponseEntity<Customer> hello(){
     Customer cust = repo.findByEmail("rak").orElseThrow();
-    return ResponseEntity.ok().cacheControl(CacheControl.maxAge(3600,TimeUnit.SECONDS)).body(cust);
+    // return ResponseEntity.ok().cacheControl(CacheControl.maxAge(3600,TimeUnit.SECONDS)).body(cust);
+    return ResponseEntity.ok().body(cust);
   }
   
 }

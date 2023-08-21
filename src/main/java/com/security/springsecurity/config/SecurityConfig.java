@@ -18,6 +18,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import com.security.springsecurity.filters.CsrfCookieFilter;
+import com.security.springsecurity.filters.JwtTokenGeneratorFilter;
+import com.security.springsecurity.filters.JwtTokenValidatorFilter;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -29,11 +31,9 @@ public class SecurityConfig {
     CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
     requestHandler.setCsrfRequestAttributeName(null);
 
-    http.securityContext(context -> {
-      context.requireExplicitSave(false);
-    })
-        .sessionManagement(sessionmanage -> {
-          sessionmanage.sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
+    http.
+        sessionManagement(sessionmanage -> {
+          sessionmanage.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         })
         .cors(cors -> cors.configurationSource(new CorsConfigurationSource() {
 
@@ -44,6 +44,7 @@ public class SecurityConfig {
             corsObj.setAllowedHeaders(Arrays.asList("*"));
             corsObj.setAllowedMethods(Arrays.asList("*"));
             corsObj.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+            corsObj.setExposedHeaders(Arrays.asList("Authorization"));
             corsObj.setMaxAge(3600L);
             return corsObj;
           }
@@ -54,12 +55,13 @@ public class SecurityConfig {
           .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
     })
         .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+        .addFilterAfter(new JwtTokenGeneratorFilter(), BasicAuthenticationFilter.class)
+        .addFilterBefore(new JwtTokenValidatorFilter(), BasicAuthenticationFilter.class)
         .authorizeHttpRequests(
             (requests) -> requests.requestMatchers("/phello").hasAuthority("user")
-            .requestMatchers( "/hello").hasAuthority("admin")
+            .requestMatchers( "/vishal").hasAuthority("admin")
             .requestMatchers( "/name").hasAnyAuthority("admin","user")
-            .requestMatchers("/create").authenticated() 
-                .requestMatchers("/welcome","/vishal").permitAll()
+            .requestMatchers("/welcome","/create","/hello").permitAll()
 
         // .requestMatchers(HttpMethod.POST, "/create").permitAll()
         )
